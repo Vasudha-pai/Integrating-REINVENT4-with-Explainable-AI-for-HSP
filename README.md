@@ -10,6 +10,6 @@ This repository contains the complete computational pipeline for the
 - **Counterfactual Masking** for actionable structural refinement suggestions
 - **Molecular Docking** and **MD Simulations** for candidate validation
 
-Unlike traditional generative approaches that operate as black boxes, this pipeline provides **chemically interpretable outputs**—enabling rational, hypothesis-driven drug discovery.
+I shall probably update my files when I finish working with the codes 
 
 ---
