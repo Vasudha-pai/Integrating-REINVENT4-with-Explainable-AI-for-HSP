@@ -8,7 +8,8 @@ This repository contains the complete computational pipeline for the
 - **REINVENT4** for transfer learning and reinforcement learning-based molecule generation
 - **SHAP (SHapley Additive exPlanations)** for atom-level feature attribution
 - **Counterfactual Masking** for actionable structural refinement suggestions
-- **Molecular Docking** and **MD Simulations** for candidate validation
+- **Molecular Docking** and **MD Simulations** for candidate validation.
+
 The first thing is we need a conda environment to begin with.
 The yml file uploaded here would be the first step with this project. the yml file has the necessary installation libraries required. 
   
