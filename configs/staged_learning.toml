@@ -1,0 +1,81 @@
+# REINVENT4 Staged (Reinforcement) Learning configuration.
+#
+# Purpose: optimize generated molecules toward HSP90 activity using the trained
+# QSAR model as the dominant reward, combined with drug-likeness / property
+# constraints. Run with:
+#
+#     reinvent -l rl.log configs/staged_learning.toml
+#
+# The HSP90 reward is supplied by our external scorer (scripts/score_smiles.py),
+# so no edits to the REINVENT4 source tree are needed.
+
+run_type = "staged_learning"
+device = "cuda:0"          # "cpu" to run without a GPU (slow)
+tb_logdir = "results/tb_rl"
+json_out_config = "results/_rl.json"
+
+[parameters]
+# Agent = focused model from transfer learning; prior = same, kept as reference.
+prior_file = "results/hsp90_focused.model"
+agent_file = "results/hsp90_focused.model"
+summary_csv_prefix = "results/rl_hsp90"
+
+batch_size = 128
+use_checkpoint = false
+
+# ---- Diversity filter: discourage mode collapse onto a few scaffolds --------
+[diversity_filter]
+type = "IdenticalMurckoScaffold"
+bucket_size = 25
+minscore = 0.4
+minsimilarity = 0.4
+
+# ---- Learning strategy ------------------------------------------------------
+[learning_strategy]
+type = "dap"               # Difference-Augmented Policy
+sigma = 128
+rate = 0.0001
+
+# ---- Stage 1: optimize the aggregate score ---------------------------------
+[[stage]]
+chkpt_file = "results/hsp90_rl_stage1.chkpt"
+termination = "simple"
+max_score = 0.8
+min_steps = 50
+max_steps = 500
+
+[stage.scoring]
+type = "geometric_mean"
+
+# HSP90 QSAR activity (our model) - the main objective.
+[[stage.scoring.component]]
+type = "ExternalProcess"
+[stage.scoring.component.ExternalProcess]
+name = "HSP90_QSAR"
+weight = 3
+[stage.scoring.component.ExternalProcess.endpoint]
+params.executable = "python"
+params.args = "scripts/score_smiles.py --model results/qsar_model.joblib"
+
+# QED drug-likeness.
+[[stage.scoring.component]]
+type = "Qed"
+[stage.scoring.component.Qed]
+name = "QED"
+weight = 1
+[stage.scoring.component.Qed.endpoint]
+transform.type = "no_transform"
+
+# Molecular weight window (soft target ~250-500 Da).
+[[stage.scoring.component]]
+type = "MolecularWeight"
+[stage.scoring.component.MolecularWeight]
+name = "MW"
+weight = 1
+[stage.scoring.component.MolecularWeight.endpoint]
+transform.type = "double_sigmoid"
+transform.high = 500
+transform.low = 250
+transform.coef_div = 500
+transform.coef_si = 20
+transform.coef_se = 20

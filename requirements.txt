@@ -1,0 +1,15 @@
+# Pip dependencies for the HSP90 REINVENT4 + XAI pipeline.
+# Prefer the conda route (environment.yml); this file is for pip-only setups.
+# RDKit via pip requires a recent pip: `pip install rdkit`.
+rdkit>=2023.09.1
+numpy
+pandas
+scikit-learn
+imbalanced-learn
+matplotlib
+seaborn
+shap
+chembl_webresource_client
+toml
+tqdm
+jupyterlab

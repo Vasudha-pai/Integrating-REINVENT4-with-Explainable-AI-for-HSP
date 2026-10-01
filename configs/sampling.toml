@@ -1,0 +1,16 @@
+# REINVENT4 Sampling configuration.
+#
+# Purpose: draw a batch of molecules from a trained model (the focused prior or
+# an RL-optimized agent) for scoring, explanation, and triage. Run with:
+#
+#     reinvent -l sample.log configs/sampling.toml
+
+run_type = "sampling"
+device = "cuda:0"          # "cpu" also works for sampling
+
+[parameters]
+model_file = "results/hsp90_rl_stage1.chkpt"   # or results/hsp90_focused.model
+output_file = "results/sampled.csv"
+num_smiles = 1000
+unique_molecules = true
+randomize_smiles = true
