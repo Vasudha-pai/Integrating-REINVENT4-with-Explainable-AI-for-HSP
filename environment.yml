@@ -1,0 +1,23 @@
+name: reinvent4-hsp-xai
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - rdkit>=2023.09
+  - numpy
+  - pandas
+  - scikit-learn
+  - imbalanced-learn
+  - matplotlib
+  - seaborn
+  - jupyterlab
+  - tqdm
+  - pip:
+      - shap
+      - chembl_webresource_client
+      - toml
+# NOTE: REINVENT4 itself is installed separately from its own repository,
+# because it pins its own dependency set. See README section "1. Environment setup".
+#   git clone https://github.com/MolecularAI/REINVENT4.git
+#   cd REINVENT4 && pip install -e .

@@ -1,0 +1,32 @@
+# REINVENT4 Transfer Learning (TL) configuration.
+#
+# Purpose: bias a general-purpose prior toward HSP90-like chemical space by
+# fine-tuning on a focused set of known/putative HSP90 inhibitors before any
+# reinforcement learning. Run with:
+#
+#     reinvent -l tl.log configs/transfer_learning.toml
+#
+# Fill in the paths marked TODO. The empty-string defaults are placeholders so
+# the file parses; REINVENT will error clearly if a required path is missing.
+
+run_type = "transfer_learning"
+device = "cuda:0"          # use "cpu" if no GPU is available (slow)
+tb_logdir = "results/tb_tl"
+json_out_config = "results/_tl.json"
+
+[parameters]
+num_epochs = 50
+save_every_n_epochs = 5
+batch_size = 128
+sample_batch_size = 256
+
+# Starting prior shipped with REINVENT4 (Reinvent de novo model).
+input_model_file = "REINVENT4/priors/reinvent.prior"
+output_model_file = "results/hsp90_focused.model"
+
+# Focused training set: one SMILES per line of known HSP90-active molecules.
+# Generate it from your curated data, e.g. the actives in data/hsp90.csv.
+smiles_file = "data/hsp90_actives.smi"    # TODO: export actives here
+
+# Optional held-out set to monitor validation NLL during fine-tuning.
+# validation_smiles_file = "data/hsp90_actives_valid.smi"

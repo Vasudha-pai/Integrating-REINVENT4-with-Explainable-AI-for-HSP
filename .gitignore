@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Data artifacts (large / regenerable). Keep raw curated CSVs out of git unless small.
+data/*.csv
+data/*.smi
+data/*.sdf
+!data/README.md
+
+# Trained models and run outputs
+results/*
+!results/.gitkeep
+*.pkl
+*.joblib
+*.pt
+*.ckpt
+*.chkpt
+
+# REINVENT4 checkout (installed separately)
+REINVENT4/
+
+# OS
+.DS_Store
